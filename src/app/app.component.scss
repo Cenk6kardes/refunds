@@ -1,0 +1,35 @@
+
+body {
+    margin: 0;
+}
+
+main {
+    margin: 30px;
+}
+
+
+.mat-nav-list {
+    display: block;
+    padding:10px;
+      
+}
+
+
+mat-sidenav{
+    padding: 20px;
+    background: #3b8d99;  
+  
+
+}
+mat-toolbar{
+background: #aa4b6b; 
+background: -webkit-linear-gradient(to right, #3b8d99, #637485, #2f567a); 
+background: linear-gradient(to right, #3b8d99, #637485, #2f567a); 
+
+ 
+}
+
+#logout{
+    margin-left: auto;
+    color: aliceblue;
+}

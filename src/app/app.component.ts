@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs';
+import { AuthService } from './service/auth/auth.service';
 import { Component } from '@angular/core';
 
 @Component({
@@ -7,4 +9,14 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Ebebek-refund';
+  isLoggedIn!:Observable<boolean>
+  constructor(private authService: AuthService) {
+    this.isLoggedIn = this.authService.isLoggedIn;
+   }
+  
+  logout() {
+    this.authService.logout();
+  }
+  
+
 }

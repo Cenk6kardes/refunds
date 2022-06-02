@@ -1,0 +1,63 @@
+<div class="spinner-container" *ngIf="loading">
+    <mat-spinner ></mat-spinner>
+  </div>
+
+    <div  fxLayout="column" fxLayoutAlign="center center">
+
+
+          <mat-card>
+              <div>
+                <img src="/assets/image/logos/e-bebek.svg" alt="">
+              </div>
+          
+            <mat-card-title >Portal Girişi </mat-card-title>
+            <mat-card-content> 
+            <form name="loginForm" [formGroup]="loginForm" (ngSubmit)="submit()" novalidate>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>E-mail</mat-label>
+                    <input matInput formControlName="email" >
+                    <mat-icon matSuffix class="secondary-text">email</mat-icon>
+                    <mat-error *ngIf="f['email'].hasError('required')">
+                    E-mail Required.
+                    </mat-error>
+                    <mat-error
+                        *ngIf="!f['email'].hasError('required') &&
+                                f['email'].hasError('pattern')">
+                        Enter a Valid E-mail Address.
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Password</mat-label>
+                    <input matInput   [type]="showPassword ? 'text' : 'password'" formControlName="password">
+                   <mat-icon id="password" matSuffix  (click)="togglePasswordVisible()">remove_red_eye</mat-icon>
+                   
+                    <mat-error *ngIf="f['password'].hasError('minlength')">
+                          Password should be longer than 3 letters. 
+                       </mat-error>
+                    <mat-error *ngIf="f['password'].hasError('required')">
+                     Password Required
+                    </mat-error>
+                    <mat-error
+                        *ngIf="f['password'].hasError('required') &&
+                        f['password'].hasError('pattern')">
+                        Enter a valid Password.
+
+                    </mat-error>
+                </mat-form-field>
+
+              
+          <div class="button">
+        
+                <button mat-raised-button color="accent" type="submit"  
+                        [disabled]="loginForm.invalid">
+                   Log-In
+                </button>
+         
+            </div>
+
+            </form>
+        </mat-card-content>
+        </mat-card>
+        </div>

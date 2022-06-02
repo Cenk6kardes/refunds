@@ -1,0 +1,14 @@
+
+   .mat-header-row{
+     position: sticky;
+     top: 0;
+   }
+
+tr.mat-row, tr.mat-footer-row{
+    height: 30px;
+  }
+
+  mat-dialog-actions{
+    display: flex;
+    justify-content: end;
+ }

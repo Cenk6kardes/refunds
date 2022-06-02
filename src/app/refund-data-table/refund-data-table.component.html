@@ -1,0 +1,152 @@
+<div class="spinner-container" *ngIf="loading">
+  <mat-spinner ></mat-spinner>
+</div>
+
+<div class="refund">
+ 
+  <div id="formField">
+
+    <h4 >Post İade İşlemleri</h4>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <mat-form-field appearance="standard">
+        <mat-label>Tarih aralığı girin.</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input
+            matStartDate
+            formControlName="start"
+            placeholder="Start date"
+          />
+          <input matEndDate formControlName="end" placeholder="End date" />
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+      <mat-checkbox id="checkBox" formControlName="getRefunds" color="accent">
+        İadeleri de getir.
+      </mat-checkbox>
+      <button mat-flat-button id="searchButton" type="submit">
+        <mat-icon>search</mat-icon> Ara
+      </button>
+    </form>
+
+    <div >
+            <button mat-flat-button color="primary" (click)="openDialog(true)">
+        <mat-icon>add</mat-icon>Seçilenleri Öde
+      </button>
+      <button mat-flat-button color="accent" (click)="openDialog(false)">
+        <mat-icon>payment</mat-icon>İade Kodu Ekle
+      </button>
+    </div>
+
+  </div>
+
+  <table
+      #table
+     mat-table
+     matSort
+    [dataSource]="dataSource"
+    (matSortChange)="announceSortChange($event)"
+    class="refund-table mat-elevation-z8"
+  >
+    <ng-container matColumnDef="PSS_NO">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header >P.S.S No</th>
+      <!-- Sipariş Numarası -->
+      <td mat-cell *matCellDef="let element">{{ element.PSS_NO }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="PIS_NO">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header >P.İ.S No</th> 
+      <!-- Belge NO  -->
+      <td mat-cell *matCellDef="let element">{{ element.PIS_NO }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="FTR_TRH">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header >Fatura Tarihi</th>
+      <td mat-cell *matCellDef="let element">{{ element.FTR_TRH }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="IADE_TRH">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header >İade Tarihi</th>
+      <td mat-cell *matCellDef="let element">{{ element.IADE_TRH }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="MUSAD">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header >Ad Soyad</th>
+
+      <td mat-cell *matCellDef="let element">{{ element.MUSAD }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="BELGE_TOPL">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header >Belge Toplam</th>
+      <td mat-cell *matCellDef="let element">{{ element.BELGE_TOPL | currency:element.BELGE_TOPL_PB:'symbol-narrow'}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="ODEME_TIP_T">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header >Ödeme Tipi</th>
+      <td mat-cell *matCellDef="let element">{{ element.ODEME_TIP_T }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="PC_TUTAR">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header >Çekilen Tutar</th>
+      <!--belgetop-->
+      <td mat-cell *matCellDef="let element">{{ element.PC_TUTAR | currency:element.PC_TUTAR_PB:'symbol-narrow' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="IADE_TUTAR">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header >İade Tutarı</th>
+      <td mat-cell *matCellDef="let element">{{ element.IADE_TUTAR | currency:element.IADE_TUTAR_PB:'symbol-narrow' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="KKP_TUTAR">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header >Para Çeki</th>
+      <td mat-cell *matCellDef="let element">{{ element.KKP_TUTAR }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="HCEKI">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header >Hediye Çeki</th>
+      <td mat-cell *matCellDef="let element">{{ element.HCEKI }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="ONAY_KOD">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header >Onay Kodu</th>
+      <td mat-cell *matCellDef="let element">{{ element.ONAY_KOD }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="ISLENEN_POS">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header >İşlenen Post</th>
+      <td mat-cell *matCellDef="let element">{{ element.ISLENEN_POS }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="checkBox">
+      <th mat-header-cell *matHeaderCellDef >
+        <mat-checkbox [checked]="selection.hasValue() && isAllSelected()" (change)="toggleAll()" [disabled]="dataSource.data.length == 0"> </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let element" (click)="$event.stopPropagation()">
+        <mat-checkbox *ngIf="element.STATU_T!=refundReturned" color="primary" (change)="onRefundToggled(element)" [checked]="selection.isSelected(element)"  > </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" [attr.colspan]="displayedColumns.length" style="text-align:center">
+        Hiç Kayıt Bulunamadı.
+      </td>
+    </tr>
+
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let element; columns: displayedColumns"
+    [class.refund-returned]="element.STATU_T==refundReturned"
+    [class.selected]="selection.isSelected(element)"
+    ></tr>
+
+
+  </table>
+
+
+  <mat-paginator class="mat-elevation-z28" [pageSize]="20" [pageSizeOptions]="[10,20,25]" ></mat-paginator>
+
+</div>
+
+  

@@ -1,0 +1,83 @@
+
+.refund {
+    width: 98%;
+    margin: 0 auto;
+    margin-top: 30px; 
+    
+  }
+h4{
+  font-weight:bold ;
+}
+ 
+  .refund-returned{
+    background-color: #7ee8fa;
+    background-image: linear-gradient(315deg, #24bd75 0%, #80ff72 74%);
+
+  }
+
+
+  .refund-table {  
+    width: 100%;
+
+    .mat-row:hover {
+      background-color: #63a4ff;
+      background-image: linear-gradient(315deg, #63a4ff 40%, #83eaf1 75%);
+   
+    }
+  }
+/*    .mat-header-row{
+    position: sticky;
+    top: 0;
+  }  */
+
+  #checkBox{
+    margin: 0 5px;
+  }
+
+
+  tr.mat-row, tr.mat-footer-row{
+    height: 30px;
+  }
+
+  mat-form-field{
+    width: 45%;
+    margin-right: 5px;
+  }
+  
+
+  .mat-column-checkBox {
+    border-left: 1px solid black;
+    padding: 0 5px !important;
+    text-align: center;
+  }
+
+  #formField {
+    margin: 0 auto;
+    margin-bottom: -1.25em !important;
+    display: flex;
+
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 !important;   
+
+    }
+
+    .selected{
+      background-color: #2a9aad;
+      background-image: linear-gradient(315deg, #2182c4 0%, #1a92b6 74%);
+    }
+
+
+#searchButton{
+  background-color: #5bc0de;
+  color: #fff;
+}
+
+button{
+  margin-left: 5px;
+}
+
+button:hover{
+  opacity: 0.9;
+}

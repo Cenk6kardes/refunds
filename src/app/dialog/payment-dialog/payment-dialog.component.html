@@ -1,0 +1,64 @@
+<mat-dialog-content>
+<table
+style="width:100%"
+mat-table
+[dataSource]="tableRefunds"
+class="mat-elevation-z8"
+>
+<ng-container matColumnDef="pCeki">
+    <th mat-header-cell *matHeaderCellDef >Para Çeki</th>
+    <td mat-cell *matCellDef="let element">{{ element.KKP_TUTAR}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="hCeki">
+    <th mat-header-cell *matHeaderCellDef >Hediye Çeki</th>
+    <td mat-cell *matCellDef="let element">{{ element.HCEKI}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="sNo">
+    <th mat-header-cell *matHeaderCellDef >Satış No</th>
+    <td mat-cell *matCellDef="let element">{{ element.PSS_NO }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="iNo">
+    <th mat-header-cell *matHeaderCellDef >İade No</th>
+    <td mat-cell *matCellDef="let element">{{ element.PIS_NO }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="ad">
+    <th mat-header-cell *matHeaderCellDef >Ad Soyad</th>
+    <td mat-cell *matCellDef="let element">{{ element.MUSAD }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="öTipi">
+    <th mat-header-cell *matHeaderCellDef >Ödeme Tipi Adı</th>
+    <td mat-cell *matCellDef="let element">{{ element.ODEME_TIP_T }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="bonus">
+    <th mat-header-cell *matHeaderCellDef >Bonus</th>
+    <td mat-cell *matCellDef="let element"></td>
+  </ng-container>
+
+  <ng-container matColumnDef="kart">
+    <th mat-header-cell *matHeaderCellDef >Çekilen Tutar</th>
+    <td mat-cell *matCellDef="let element">{{ element.PC_TUTAR | currency:element.PC_TUTAR_PB:'symbol-narrow' }}</td>
+  </ng-container>
+ 
+ <!--  <ng-container matColumnDef="delete">
+    <th mat-header-cell *matHeaderCellDef ></th>
+    <td ngIf="!bankaOnay" mat-cell *matCellDef="let element"> <button mat-icon-button appearence="standard" > <mat-icon color="accent">clear</mat-icon> </button> </td>
+  </ng-container> -->
+
+
+
+<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+<tr mat-row *matRowDef="let element; columns: displayedColumns"
+></tr>
+</table>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-flat-button color="accent" (click)="close()">İptal</button>
+    <button mat-flat-button color="primary">Onaylıyorum</button>
+</mat-dialog-actions>
