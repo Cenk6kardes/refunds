@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  path:"http://ebebek-spod01:50000/RESTAdapter/HYBRIS/ODEME_IADE/"
+  /*  path:"http://10.34.79.66:9761/refund" */
+  path:"http://10.34.79.65:9761/refund"
 };
 
 /*

@@ -5,7 +5,7 @@ import { LanguageService } from './../service/language.service';
 import { RefundTableService } from './../service/refund-table.service';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
@@ -98,38 +98,28 @@ export class RefundDataTableComponent implements OnInit, AfterViewInit {
 
 
   submit() {   
-    this.loading = true; 
-    const DATAB = this.f['start'].value.toLocaleDateString("en-US");
-    const DATABI = this.f['end'].value.toLocaleDateString("en-US");
-    let refunds: string;
-    if (this.f['getRefunds'].value) {
-      refunds = 'X';
-    }
-    else {
-      refunds = '';
-    }
-        
-   
+    this.loading = true;
+    const DATAB = this.f['start'].value.toLocaleDateString("en-CA");
+    const DATABI = this.f['end'].value.toLocaleDateString("en-CA");
+    const refunds = this.f['getRefunds'].value;
 
-    console.log(DATAB, DATABI, refunds);
     const body =  {
-          DATAB: DATAB,
-          DATBI: DATABI,
-          IADE_FATURALARI:"",
-          IPTAL_SIPARISLERI: "",
-          TUM_BELGELER: refunds
+          startDate: DATAB,
+          endDate: DATABI,
+          refunded: refunds
     }
     
+ 
    
-    /* 
-    this.refundTableService.getDatas(body).pipe(takeUntil(this.unsubscribe)).subscribe((data) => { this.dataSource = data; },
+ 
+    this.refundTableService.getDatas(body).pipe(takeUntil(this.unsubscribe)).subscribe((res) => { this.dataSource.data = res;this.loading=false },
       (error) => {  this.languageService.errorToaster(error.message) })
-        */
+       
     
-    setTimeout(() => {
+ /*  setTimeout(() => {
       this.dataSource.data = this.refundTableService.getDatas(body);
       ; this.loading = false
-    }, 1500)
+    }, 1500)  */
   
   }
 
