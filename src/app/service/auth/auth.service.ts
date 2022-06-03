@@ -20,7 +20,7 @@ export class AuthService {
       this.isLoggedIn.next(true);    
       this.router.navigate(['/refund-data-table']);
     },2000)
-    localStorage.setItem("user", JSON.stringify(user)); 
+   
   }
   logout() {
     this.isLoggedIn.next(false);

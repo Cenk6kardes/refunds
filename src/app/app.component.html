@@ -1,4 +1,4 @@
-<mat-sidenav-container *ngIf="isLoggedIn |async" fullscreen>
+<mat-sidenav-container fullscreen [class.bg]="!(isLoggedIn|async)">
     <mat-sidenav  #sidenav>
 
         <mat-nav-list (click)="sidenav.close()">
@@ -6,11 +6,15 @@
                 <mat-icon>library_books</mat-icon>
                 <span>Finans</span>
             </a>
+            <a mat-list-item routerLink="404">
+                <mat-icon>library_books</mat-icon>
+                <span>Finans</span>
+            </a>
               </mat-nav-list>
 
     </mat-sidenav>
 
-    <mat-toolbar >
+    <mat-toolbar *ngIf="isLoggedIn |async" >
 
         <button mat-icon-button (click)="sidenav.open()">
             <mat-icon>menu</mat-icon>
@@ -27,10 +31,5 @@
     <router-outlet></router-outlet>
     
 </mat-sidenav-container>
-
-<div id="login">
-
-    <router-outlet *ngIf="!(isLoggedIn |async)"></router-outlet>
-</div>
 
 

@@ -1,13 +1,13 @@
 import { AuthService } from '../../service/auth/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, OnInit, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit,AfterViewInit {
+export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   loading = false;
   showPassword = false
@@ -42,10 +42,10 @@ export class LoginComponent implements OnInit,AfterViewInit {
     /*  localStorage.setItem("user", JSON.stringify(this.loginForm.getRawValue()));     */
     this.authService.login(this.loginForm.getRawValue());
   }
-  
+  /* 
   ngAfterViewInit(): void {
     this.elementRef.nativeElement.ownerDocument
-    .body.style.background = 'url(/assets/image/background/dark-material-bg.jpg)';
-  }
+    .body.style.background = 'url(/assets/image/background/dark-material-bg.jpg ) !important';
+  } */
   
 }
