@@ -80,7 +80,7 @@ export class RefundDataTableComponent implements OnInit, AfterViewInit,OnDestroy
     });
 
     dialogRef.afterClosed().subscribe(res => {
-      console.log("Kapandı");
+      this.submit();
 
     })
     }

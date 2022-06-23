@@ -12,14 +12,16 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class PaymentDialogComponent implements OnInit,OnDestroy {
 
+    
+
   constructor(public dialogRef: MatDialogRef<PaymentDialogComponent>,
     private refundTableService:RefundTableService,
     @Inject(MAT_DIALOG_DATA) public refunds: RefundItem[],
     private toastr:LanguageService
   ) { }
   
-  
-    displayedColumns: string[] = ['pCeki', 'hCeki', 'sNo', 'iNo', "ad", "öTipi", "bonus", "kart"];
+  loading!: boolean;
+  displayedColumns: string[] = ['pCeki', 'hCeki', 'sNo', 'iNo', "ad", "öTipi", "bonus", "kart"];
   tableRefunds: RefundItem[] = [];
   private unsubscribe = new Subject<void>();
 
@@ -32,6 +34,7 @@ export class PaymentDialogComponent implements OnInit,OnDestroy {
      this.refundTableService.getDatas(body).pipe(takeUntil(this.unsubscribe)).subscribe((res) => { this.dataSource.data = res; this.loading= false  },
       (error) => { this.languageService.errorToaster(error.message); this.loading= false })
     */
+    this.loading = true;
     this.refundTableService.confirmPayment(this.tableRefunds).pipe(takeUntil(this.unsubscribe)).subscribe((response) => {      
 
       let res = Object.values(response)
@@ -40,8 +43,12 @@ export class PaymentDialogComponent implements OnInit,OnDestroy {
       errors.forEach(error => {
         this.toastr.errorToaster(error.PSS_NO +" numaralı sipariş iade edilemedi.")
       })
+      if(errors.length < 1) this.toastr.successToaster("İadeler Başarılı.")
+      this.loading = false;
        
     }, (err) => { console.log(err); })
+
+
   }
   
   close() {
