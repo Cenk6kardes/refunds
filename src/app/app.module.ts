@@ -74,7 +74,7 @@ import { AddRefundCodeDialogComponent } from './dialog/add-refund-code-dialog/ad
     BrowserAnimationsModule,
     ToastrModule.forRoot({
       positionClass: 'toast-top-center',
-      timeOut: 2000
+      timeOut: 2500
   }),
   ],
   providers: [  {provide: MAT_DATE_LOCALE, useValue: 'tr-TR'}],

@@ -3,7 +3,7 @@ import { PaymentDialogComponent } from './../dialog/payment-dialog/payment-dialo
 import { RefundItem } from './../shared/item';
 import { LanguageService } from './../service/language.service';
 import { RefundTableService } from './../service/refund-table.service';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
@@ -19,7 +19,7 @@ import { SelectionModel } from '@angular/cdk/collections';
   templateUrl: './refund-data-table.component.html',
   styleUrls: ['./refund-data-table.component.scss']
 })
-export class RefundDataTableComponent implements OnInit, AfterViewInit {
+export class RefundDataTableComponent implements OnInit, AfterViewInit,OnDestroy {
   
   @ViewChild(MatTable)
   table!: MatTable<RefundItem>;
@@ -81,6 +81,7 @@ export class RefundDataTableComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(res => {
       console.log("Kapandı");
+
     })
     }
     if (!flag) {
@@ -90,10 +91,11 @@ export class RefundDataTableComponent implements OnInit, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(res => {
-      console.log(res);;
+      console.log(res);
+
     })
+    }   
     }
-  }
 
 
 
@@ -109,11 +111,10 @@ export class RefundDataTableComponent implements OnInit, AfterViewInit {
           refunded: refunds
     }
     
+    this.selection.clear();
  
-   
- 
-    this.refundTableService.getDatas(body).pipe(takeUntil(this.unsubscribe)).subscribe((res) => { this.dataSource.data = res;this.loading=false },
-      (error) => {  this.languageService.errorToaster(error.message) })
+    this.refundTableService.getDatas(body).pipe(takeUntil(this.unsubscribe)).subscribe((res) => { this.dataSource.data = res; this.loading= false  },
+      (error) => { this.languageService.errorToaster(error.message); this.loading= false })
        
     
  /*  setTimeout(() => {
@@ -130,7 +131,6 @@ export class RefundDataTableComponent implements OnInit, AfterViewInit {
   onRefundToggled(refund: RefundItem):void {
    
     this.selection.toggle(refund);    
-
     /* console.log(this.selection.selected); */
 
     
@@ -142,12 +142,13 @@ export class RefundDataTableComponent implements OnInit, AfterViewInit {
   toggleAll():void{
     if (this.isAllSelected()) {
       this.selection.clear();
+
     }
     else {
    
     /*this.selection.select(...this.dataSource.connect().value.filter((refund) => refund.STATU_T != this.refundReturned))  sadece gözüken dataları işaretleme*/
+      this.selection.select(...this.dataSource.data.filter((refund) => refund.STATU_T != this.refundReturned));
 
-     this.selection.select(...this.dataSource.data.filter((refund) => refund.STATU_T != this.refundReturned));
     }  
     
 
@@ -166,8 +167,7 @@ export class RefundDataTableComponent implements OnInit, AfterViewInit {
     } else {
       this._liveAnnouncer.announce('Sorting cleared');
     }
-    console.log(this.paginator.pageSize);
-    console.log( this.paginator.pageIndex);
+
    }
   
   

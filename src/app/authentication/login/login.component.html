@@ -4,13 +4,12 @@
 
     <div  fxLayout="column" fxLayoutAlign="center center">
 
-
           <mat-card>
               <div>
                 <img src="/assets/image/logos/e-bebek.svg" alt="">
               </div>
           
-            <mat-card-title >Portal Girişi </mat-card-title>
+            <mat-card-title>Portal Girişi </mat-card-title>
             <mat-card-content> 
             <form name="loginForm" [formGroup]="loginForm" (ngSubmit)="submit()" novalidate>
 
@@ -31,7 +30,7 @@
                 <mat-form-field appearance="outline">
                     <mat-label>Password</mat-label>
                     <input matInput   [type]="showPassword ? 'text' : 'password'" formControlName="password">
-                   <mat-icon id="password" matSuffix  (click)="togglePasswordVisible()">remove_red_eye</mat-icon>
+                   <mat-icon data-bs-toggle="tooltip" data-bs-placement="top" title="Password toggle" id="password" matSuffix  (click)="togglePasswordVisible()">remove_red_eye</mat-icon>
                    
                     <mat-error *ngIf="f['password'].hasError('minlength')">
                           Password should be longer than 3 letters. 

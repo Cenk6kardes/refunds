@@ -1,0 +1,6 @@
+{
+    "/api": {
+      "target":"http://10.34.79.65:9761/refund",
+      "secure": false
+    }
+  }

@@ -14,12 +14,13 @@ export class AuthService {
 
   
   login(user: User) {
-    console.log(user);
     this.langageService.successToaster('Giriş Yapıldı.')
-    setTimeout(() => {
+    this.isLoggedIn.next(true);    
+    this.router.navigate(['/refund-data-table']);
+  /*   setTimeout(() => {
       this.isLoggedIn.next(true);    
       this.router.navigate(['/refund-data-table']);
-    },2000)
+    },2000) */
    
   }
   logout() {

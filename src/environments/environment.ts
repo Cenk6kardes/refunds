@@ -5,10 +5,11 @@
 export const environment = {
   production: false,
   /*  path:"http://10.34.79.66:9761/refund" */
-  path:"http://10.34.79.65:9761/refund"
+  path: "http://10.34.79.65:9761/refund"
+  
 };
 
-/*
+/*proxy.conf.json
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
  *
