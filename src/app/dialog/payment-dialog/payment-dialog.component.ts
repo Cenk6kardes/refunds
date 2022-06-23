@@ -20,6 +20,7 @@ export class PaymentDialogComponent implements OnInit,OnDestroy {
     private toastr:LanguageService
   ) { }
   
+
   loading!: boolean;
   displayedColumns: string[] = ['pCeki', 'hCeki', 'sNo', 'iNo', "ad", "öTipi", "bonus", "kart"];
   tableRefunds: RefundItem[] = [];
@@ -42,9 +43,13 @@ export class PaymentDialogComponent implements OnInit,OnDestroy {
       let errors = res.filter(refund => refund.transactionStatus = "REFUND_ERROR" || "SAP_SAVE_ERROR")
       errors.forEach(error => {
         this.toastr.errorToaster(error.PSS_NO +" numaralı sipariş iade edilemedi.")
-      })
-      if(errors.length < 1) this.toastr.successToaster("İadeler Başarılı.")
+      })   
       this.loading = false;
+      if (errors.length < 1) {
+        this.toastr.successToaster("İadeler Başarılı.")
+        this.dialogRef.close(true)
+      }
+      
        
     }, (err) => { console.log(err); })
 
@@ -52,7 +57,7 @@ export class PaymentDialogComponent implements OnInit,OnDestroy {
   }
   
   close() {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 
 
