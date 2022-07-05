@@ -3,7 +3,7 @@ import { PaymentDialogComponent } from './../dialog/payment-dialog/payment-dialo
 import { RefundItem } from './../shared/item';
 import { LanguageService } from './../service/language.service';
 import { RefundTableService } from './../service/refund-table.service';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
@@ -12,6 +12,9 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, Sort } from '@angular/material/sort';
 import {MatDialog} from '@angular/material/dialog';
 import { SelectionModel } from '@angular/cdk/collections';
+import * as XLSX from 'xlsx'
+
+
 
 
 @Component({
@@ -21,6 +24,9 @@ import { SelectionModel } from '@angular/cdk/collections';
 })
 export class RefundDataTableComponent implements OnInit, AfterViewInit,OnDestroy {
   
+  @ViewChild('TABLE')
+  Table!: ElementRef;
+
   @ViewChild(MatTable)
   table!: MatTable<RefundItem>;
 
@@ -61,6 +67,7 @@ export class RefundDataTableComponent implements OnInit, AfterViewInit,OnDestroy
   }
 
   ngOnInit(): void {
+   
   }
   
   get f() {
@@ -93,7 +100,9 @@ export class RefundDataTableComponent implements OnInit, AfterViewInit,OnDestroy
     });
 
     dialogRef.afterClosed().subscribe(res => {
-      console.log(res);
+      if (res) {
+        this.submit();
+     }
 
     })
     }   
@@ -118,12 +127,6 @@ export class RefundDataTableComponent implements OnInit, AfterViewInit,OnDestroy
     this.refundTableService.getDatas(body).pipe(takeUntil(this.unsubscribe)).subscribe((res) => { this.dataSource.data = res; this.loading= false  },
       (error) => { this.languageService.errorToaster(error.message); this.loading= false })
        
-    
- /*  setTimeout(() => {
-      this.dataSource.data = this.refundTableService.getDatas(body);
-      ; this.loading = false
-    }, 1500)  */
-  
   }
 
 
@@ -138,7 +141,7 @@ export class RefundDataTableComponent implements OnInit, AfterViewInit,OnDestroy
     
   }
   isAllSelected(): boolean {    
-    return this.selection.selected.length == this.dataSource.data.filter((refund) => refund.STATU_T != this.refundReturned).length;
+    return this.selection.selected.length == this.dataSource.filteredData.filter((refund) => refund.STATU_T != this.refundReturned).length;
   }
 
   toggleAll():void{
@@ -149,10 +152,9 @@ export class RefundDataTableComponent implements OnInit, AfterViewInit,OnDestroy
     else {
    
     /*this.selection.select(...this.dataSource.connect().value.filter((refund) => refund.STATU_T != this.refundReturned))  sadece gözüken dataları işaretleme*/
-      this.selection.select(...this.dataSource.data.filter((refund) => refund.STATU_T != this.refundReturned));
+      this.selection.select(...this.dataSource.filteredData.filter((refund) => refund.STATU_T != this.refundReturned));
 
     }  
-    
 
   }
 
@@ -172,11 +174,61 @@ export class RefundDataTableComponent implements OnInit, AfterViewInit,OnDestroy
 
    }
   
+  filter(input:any) {
+    let value = input.target.value;
+    this.dataSource.filter = value.trim().toLocaleLowerCase();       
+  }  
+
+  excel() {
+     let excels: Excel[] = [];
+ 
+
+     this.dataSource.filteredData.forEach(refund => {
+       let excel: Excel = {
+       PSS_NO : refund.PSS_NO,
+       PIS_NO : refund.PIS_NO,
+       FaturaTarihi : refund.FTR_TRH,
+       IadeTarihi : refund.IADE_TRH,
+       AdSoyad : refund.MUSAD,
+       BelgeToplam : refund.BELGE_TOPL,
+       ÖdemeTipi : refund.ODEME_TIP_T,
+       ÇekilenTutar : refund.PC_TUTAR,
+       İadeTutar : refund.IADE_TUTAR,
+       ParaÇeki : refund.KKP_TUTAR,
+       HediyeÇeki : refund.HCEKI,
+       İadeOnayKodu : refund.ONAY_KOD,
+       İşlenenPost : refund.ISLENEN_POS,
+       }
+       excels.push(excel);
+     })
+
+     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(excels);
+
+  // const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataSource.filteredData);
+  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  const filename = 'Refunds' + this.f['start'].value.toLocaleDateString("en-CA")+"/" +this.f['end'].value.toLocaleDateString("en-CA")+'-'+this.f['getRefunds'].value+ '.xlsx';
+  XLSX.writeFile(wb, filename);
+  }
   
 
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
 }
-
 }
+ export interface Excel{
+   PSS_NO: number,
+   PIS_NO: number,
+   FaturaTarihi: string,
+   IadeTarihi:string,
+   AdSoyad : string;
+   BelgeToplam :number;
+   ÖdemeTipi : string;
+   ÇekilenTutar : string;
+   İadeTutar :number;
+   ParaÇeki :number;
+   HediyeÇeki :string;
+   İadeOnayKodu :string;
+   İşlenenPost : string;
+ }

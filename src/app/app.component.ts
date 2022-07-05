@@ -15,9 +15,11 @@ export class AppComponent {
     this.isLoggedIn = this.authService.isLoggedIn;
    }
   
+    
+  
   logout() {
     this.authService.logout();
-    this.toastr.successToaster("Logged Out")
+    this.toastr.successToaster("Çıkış Yapıldı.")
   }
   
 

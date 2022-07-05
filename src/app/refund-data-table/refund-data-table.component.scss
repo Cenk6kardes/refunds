@@ -25,10 +25,10 @@ h4{
    
     }
   }
-/*    .mat-header-row{
-    position: sticky;
-    top: 0;
-  }  */
+  //   .mat-header-row{
+  //   position: sticky;
+  //   top: 0;
+  // } 
 
   #checkBox{
     margin: 0 5px;
@@ -57,7 +57,7 @@ h4{
     display: flex;
 
     flex-direction: row;
-    align-items: center;
+    align-items:baseline;
     justify-content: space-between;
     padding: 0 !important;   
 
@@ -69,6 +69,9 @@ h4{
     }
 
 
+#searchBar{
+  width: auto;
+}
 #searchButton{
   background-color: #5bc0de;
   color: #fff;
@@ -80,4 +83,11 @@ button{
 
 button:hover{
   opacity: 0.9;
+}
+.mat-success{
+  background-color:#1D6F42;
+  color: #fff;
+}
+mat-icon{
+  font-size: 19px;
 }

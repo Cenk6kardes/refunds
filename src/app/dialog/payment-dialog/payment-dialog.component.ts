@@ -23,35 +23,39 @@ export class PaymentDialogComponent implements OnInit,OnDestroy {
 
   loading!: boolean;
   displayedColumns: string[] = ['pCeki', 'hCeki', 'sNo', 'iNo', "ad", "öTipi", "bonus", "kart"];
-  tableRefunds: RefundItem[] = [];
   private unsubscribe = new Subject<void>();
 
   ngOnInit(): void {
-    this.tableRefunds = this.refunds;
+  
      }
   
   confirmPayment() {
-    /* this.refundTableService.confirmPayment(this.tableRefunds).subscribe(); 
+    /* this.refundTableService.confirmPayment(this.refunds).subscribe(); 
      this.refundTableService.getDatas(body).pipe(takeUntil(this.unsubscribe)).subscribe((res) => { this.dataSource.data = res; this.loading= false  },
       (error) => { this.languageService.errorToaster(error.message); this.loading= false })
     */
     this.loading = true;
-    this.refundTableService.confirmPayment(this.tableRefunds).pipe(takeUntil(this.unsubscribe)).subscribe((response) => {      
+    this.refundTableService.confirmPayment(this.refunds).pipe(takeUntil(this.unsubscribe)).subscribe((response) => {      
 
       let res = Object.values(response)
      
-      let errors = res.filter(refund => refund.transactionStatus = "REFUND_ERROR" || "SAP_SAVE_ERROR")
-      errors.forEach(error => {
+      let refErrors = res.filter(refund => refund.transactionStatus === "REFUND_ERROR")
+      console.log(refErrors);
+      refErrors.forEach(error => {
         this.toastr.errorToaster(error.PSS_NO +" numaralı sipariş iade edilemedi.")
       })   
+
+      let sapErrors = res.filter(refund => refund.transactionStatus === "SAP_SAVE_ERROR")
+      console.log(sapErrors);
+      sapErrors.forEach(error => {
+        this.toastr.errorToaster(error.PSS_NO +" numaralı sipariş SAP'ye kaydedilemedi.")
+      })   
       this.loading = false;
-      if (errors.length < 1) {
-        this.toastr.successToaster("İadeler Başarılı.")
-        this.dialogRef.close(true)
-      }
+
+      this.dialogRef.close(true)
       
        
-    }, (err) => { console.log(err); })
+    }, (err) => { console.log(err);this.loading=false })
 
 
   }

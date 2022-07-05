@@ -4,6 +4,8 @@ import { RefundItem } from './../shared/item';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { ThisReceiver } from '@angular/compiler';
+import { Observable } from 'rxjs';
 
 
 
@@ -12,7 +14,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class RefundTableService {
-  getPath = "SEND_DATA"
+  
   
     constructor(private http: HttpClient) {
       
@@ -29,13 +31,6 @@ export class RefundTableService {
        return this.http.get<RefundItem[]>(environment.path+'?'+queryString) 
     }
     
-    // "order_no": "5425774401",
-    // "invoice_no": "7000208805",
-    // "order_date": "2022-01-18",
-    // "total_amount": 89.97,
-    // "refund_amount": 0.0,
-    // "processed_pos": 1
-
     confirmPayment(refunds: RefundItem[]) {
 
     
@@ -54,5 +49,27 @@ export class RefundTableService {
         
         return this.http.post(environment.path, refundsPay);
     }
+  
 
+  
+  confirmCode(refunds: RefundItem[]) {
+    const refundsCode = refunds.map((refund) => {
+      return {
+        PIS_NO: refund.PIS_NO.toString(),
+        ONAY_KOD: refund.ONAY_KOD,
+        ISLENEN_POS:"1"
+        }
+
+    })
+    
+     return this.http.post(environment.path + "/save",refundsCode) as Observable<codeResponse>
+
+  
+  }
+}
+
+
+export interface codeResponse{
+  failureList: Array<any>|null,
+  successList: Array<any>|null
 }
